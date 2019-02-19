@@ -1,5 +1,6 @@
 package store.hapus.com.hapus;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         SystemClock.sleep(3000);
-        Intent loginIntent = new Intent(SplashActivity.this, LoginActivity.class);
+        Intent loginIntent = new Intent(SplashActivity.this, RegisterActivity.class);
         startActivity(loginIntent);
         finish();
     }
