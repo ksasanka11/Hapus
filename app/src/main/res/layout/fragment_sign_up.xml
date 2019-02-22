@@ -23,8 +23,8 @@
 
         <ImageView
             android:id="@+id/imageView1"
-            android:layout_width="147dp"
-            android:layout_height="138dp"
+            android:layout_width="106dp"
+            android:layout_height="88dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
@@ -34,7 +34,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.06999999" />
+            app:layout_constraintVertical_bias="0.07999998" />
 
         <EditText
             android:id="@+id/sign_up_email"
@@ -107,7 +107,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:background="@color/btnGreen"
@@ -118,7 +117,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sign_up_confirm_password"
-            app:layout_constraintVertical_bias="0.41000003" />
+            app:layout_constraintVertical_bias="0.52" />
 
         <TextView
             android:id="@+id/textView"
@@ -130,13 +129,13 @@
             android:layout_marginBottom="8dp"
             android:text="or"
             android:textColor="@color/colorAccent"
-            app:layout_constraintBottom_toTopOf="@+id/already_have_an_account"
+            app:layout_constraintBottom_toTopOf="@+id/tv_already_have_an_account"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sign_up_btn" />
 
         <TextView
-            android:id="@+id/already_have_an_account"
+            android:id="@+id/tv_already_have_an_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -184,6 +183,17 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sign_up_fullname" />
+
+        <ProgressBar
+            android:id="@+id/sign_up_progressbar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/sign_up_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sign_up_confirm_password" />
 
 
     </android.support.constraint.ConstraintLayout>
