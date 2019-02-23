@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "184659757330",
+    "firebase_url": "https://hapus-1e50b.firebaseio.com",
+    "project_id": "hapus-1e50b",
+    "storage_bucket": "hapus-1e50b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184659757330:android:e3431114a94f0b9e",
+        "android_client_info": {
+          "package_name": "com.hapus.android.store"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "184659757330-r0r6gmi5mde9jb01cdp5i8k2p2vhmtfk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxvYEoFRDHa2bawogDBnyGYy2GfM2aWf0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

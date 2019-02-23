@@ -91,6 +91,8 @@
             android:background="@color/btnGreen"
             android:text="Sign in"
             android:textAllCaps="false"
+            android:enabled="false"
+            android:textColor="#50000000"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
