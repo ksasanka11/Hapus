@@ -45,7 +45,7 @@ public class HomeFragment extends Fragment {
         categoryModelList.add(new CategoryModel("Link", "Home"));
         categoryModelList.add(new CategoryModel("Link", "Millets"));
         categoryModelList.add(new CategoryModel("Link", "Snacks"));
-        categoryModelList.add(new CategoryModel("Link", "Organic"));
+        categoryModelList.add(new CategoryModel("Link", "Recipes"));
 
         categoryAdapter = new CategoryAdapter(categoryModelList);
         //categoryRecyclerView.addItemDecoration(new SpacingItemDecoration(getContext(), 16));
