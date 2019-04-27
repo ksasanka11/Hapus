@@ -18,14 +18,25 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/category_recyclerview">
 
-        <include layout="@layout/sliding_ad_layout" />
+        <include layout="@layout/horizontal_scroll_layout" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+        <include layout="@layout/sliding_ad_layout" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
