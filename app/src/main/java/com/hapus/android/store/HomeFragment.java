@@ -31,6 +31,7 @@ public class HomeFragment extends Fragment {
         // Required empty public constructor
     }
 
+
     private RecyclerView categoryRecyclerView;
     private CategoryAdapter categoryAdapter;
 
