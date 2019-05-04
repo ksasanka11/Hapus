@@ -41,7 +41,11 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
 
     @Override
     public int getItemCount() {
-        return mHorizontalProductScrollModelList.size();
+        if(mHorizontalProductScrollModelList.size() > 5){
+            return 0;
+        }else {
+            return mHorizontalProductScrollModelList.size();
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
