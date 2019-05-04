@@ -29,8 +29,7 @@
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".CategoryActivity" />
-        <activity android:name=".Product_details_activity"></activity>
+        <activity android:name=".CategoryActivity"></activity>
     </application>
 
 </manifest>
