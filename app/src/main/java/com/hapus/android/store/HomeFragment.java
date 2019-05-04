@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -150,6 +151,26 @@ public class HomeFragment extends Fragment {
 
         ////////// Horizontal Product Layout
 
+        /////////  Grid Product Layout
+
+        TextView gridLayoutTitle = view.findViewById(R.id.grid_product_layout_title);
+        Button gridLayoutBtn = view.findViewById(R.id.grid_product_lauout_viewall_btn);
+        GridView gridView = view.findViewById(R.id.grid_product_layout_gridview);
+
+        gridView.setAdapter(new GridProductLayoutAdapter(horizontalProductScrollModelList));
+
+        /////////  Grid Product Layout
+
+
+        ///////////////////////
+
+        RecyclerView testing = view.findViewById(R.id.testing);
+        LinearLayoutManager testingLayoutManager = new LinearLayoutManager(getContext());
+        testingLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        testing.setLayoutManager(testingLayoutManager);
+
+        //////////////////////
+
         return view;
     }
 
@@ -193,21 +214,5 @@ public class HomeFragment extends Fragment {
 
     ////////// Banner Slider
 
-    /*public class SpacingItemDecoration extends RecyclerView.ItemDecoration{
-        private int spacing;
-
-        public SpacingItemDecoration(Context context, int padding) {
-            DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-            spacing = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, padding, metrics);
-        }
-
-        @Override
-        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-            int position = parent.getChildAdapterPosition(view);
-            if (position != state.getItemCount() - 1) {
-                outRect.bottom = spacing;
-            }
-        }
-    }*/
 
 }
