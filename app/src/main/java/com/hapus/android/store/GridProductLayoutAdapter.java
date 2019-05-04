@@ -1,6 +1,5 @@
 package com.hapus.android.store;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +35,7 @@ public class GridProductLayoutAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View convertView, ViewGroup viewGroup) {
-        final View view;
+        View view;
 
         if(convertView == null){
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.horizontal_scroll_item_layout, null);
@@ -47,13 +46,6 @@ public class GridProductLayoutAdapter extends BaseAdapter {
             TextView productTitle = view.findViewById(R.id.h_s_product_title);
             TextView productDescription = view.findViewById(R.id.h_s_product_description);
             TextView productPrice = view.findViewById(R.id.h_s_product_price);
-
-            view.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent productDetailsIntent = new Intent(view.getContext(), Product_details_activity.class);
-                    view.getContext().startActivity(productDetailsIntent);
-                }
-            });
 
             productImage.setImageResource(horizontalProductScrollModelList.get(i).getProductImage());
             productTitle.setText(horizontalProductScrollModelList.get(i).getProductTitle());

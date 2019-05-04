@@ -33,14 +33,15 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView categoryRecyclerView;
     private CategoryAdapter categoryAdapter;
+    private RecyclerView testing;
 
 
-    /*////////// Horizontal Product Layout
-    private TextView horizontalLayoutTitle;
-    private Button horizontalLayoutViewAllButton;
-    private RecyclerView horizontalRecyclerView;
     ////////// Horizontal Product Layout
-*/
+    /*private TextView horizontalLayoutTitle;
+    private Button horizontalLayoutViewAllButton;
+    private RecyclerView horizontalRecyclerView;*/
+    ////////// Horizontal Product Layout
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -65,7 +66,7 @@ public class HomeFragment extends Fragment {
 
         ////////// Banner Slider
 
-        List<SliderModel>sliderModelList = new ArrayList<>();
+        List<SliderModel> sliderModelList = new ArrayList<>();
 
         sliderModelList.add(new SliderModel(R.drawable.ic_menu_gallery, "#5bc3c7"));
         sliderModelList.add(new SliderModel(R.drawable.home, "#5bc3c7"));
@@ -79,7 +80,6 @@ public class HomeFragment extends Fragment {
         sliderModelList.add(new SliderModel(R.drawable.home, "#5bc3c7"));
         sliderModelList.add(new SliderModel(R.mipmap.app_icon_round, "#5bc3c7"));
         sliderModelList.add(new SliderModel(R.drawable.cart_black, "#5bc3c7"));
-
         ////////// Banner Slider
 
         ////////// Horizontal Product Layout
@@ -101,14 +101,37 @@ public class HomeFragment extends Fragment {
         horizontalRecyclerView.setLayoutManager(linearLayoutManager);
         horizontalRecyclerView.setAdapter(horizontalProductScrollAdapter);
         horizontalProductScrollAdapter.notifyDataSetChanged();*/
+
         ////////// Horizontal Product Layout
+
+        /////////  Grid Product Layout
+
+        TextView gridLayoutTitle = view.findViewById(R.id.grid_product_layout_title);
+        Button gridLayoutBtn = view.findViewById(R.id.grid_product_lauout_viewall_btn);
+        GridView gridView = view.findViewById(R.id.grid_product_layout_gridview);
+
+        gridView.setAdapter(new GridProductLayoutAdapter(horizontalProductScrollModelList));
+
+        /////////  Grid Product Layout
+
 
         ///////////////////////
 
-        RecyclerView testing = view.findViewById(R.id.testing);
+        testing = view.findViewById(R.id.testing);
         LinearLayoutManager testingLayoutManager = new LinearLayoutManager(getContext());
         testingLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         testing.setLayoutManager(testingLayoutManager);
+
+        List<HomePageModel> homePageModelList = new ArrayList<>();
+        homePageModelList.add(new HomePageModel(0, sliderModelList));
+        //homePageModelList.add(new HomePageModel(0, sliderModelList));
+        //homePageModelList.add(new HomePageModel(2,"Deals of the day!", horizontalProductScrollModelList));
+        homePageModelList.add(new HomePageModel(3,"Deals of the day!", horizontalProductScrollModelList));
+        //homePageModelList.add(new HomePageModel(2,"Deals of the day!", horizontalProductScrollModelList));
+        homePageModelList.add(new HomePageModel(3,"Deals of the day!", horizontalProductScrollModelList));
+        HomePageAdapter adapter = new HomePageAdapter(homePageModelList);
+        testing.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         //////////////////////
 
