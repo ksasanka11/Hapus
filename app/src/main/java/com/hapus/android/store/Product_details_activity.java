@@ -30,6 +30,7 @@ public class Product_details_activity extends AppCompatActivity {
         productImagesViewPager = findViewById(R.id.product_images_viewpager);
         viewpagerIndicator = findViewById(R.id.viewpager_indicator);
 
+
         viewpagerIndicator.setupWithViewPager(productImagesViewPager,true);
         List<Integer> productImages=new ArrayList<>();
         productImages.add(R.drawable.cart_black);
