@@ -1,6 +1,5 @@
 package com.hapus.android.store;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -41,7 +40,11 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
 
     @Override
     public int getItemCount() {
-        return mHorizontalProductScrollModelList.size();
+        if(mHorizontalProductScrollModelList.size() > 5){
+            return 0;
+        }else {
+            return mHorizontalProductScrollModelList.size();
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -50,19 +53,12 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
         private TextView productDescription;
         private TextView productPrice;
 
-        public ViewHolder(@NonNull final View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             productImage = itemView.findViewById(R.id.h_s_product_image);
             productTitle = itemView.findViewById(R.id.h_s_product_title);
             productDescription = itemView.findViewById(R.id.h_s_product_description);
             productPrice = itemView.findViewById(R.id.h_s_product_price);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent productDetailsIntent = new Intent(itemView.getContext(), Product_details_activity.class);
-                    itemView.getContext().startActivity(productDetailsIntent);
-                }
-            });
         }
 
         private void setProductImage(int resource){
