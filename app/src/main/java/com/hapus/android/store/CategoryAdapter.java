@@ -31,7 +31,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder viewHolder, int position) {
         String icon = categoryModelList.get(position).getCategoryIconLink();
         String name = categoryModelList.get(position).getCategoryName();
-        viewHolder.setCategory(name, position);
+        viewHolder.setCategory(name);
 
     }
 
@@ -55,17 +55,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             ////todo: set category icons here
         }
 
-        private void setCategory(final String name, final int position){
+        private void setCategory(final String name){
             categoryName.setText(name);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(position != 0) {
-                        Intent categoryIntent = new Intent(itemView.getContext(), CategoryActivity.class);
-                        categoryIntent.putExtra("CategoryName", name);
-                        itemView.getContext().startActivity(categoryIntent);
-                    }
+                    Intent categoryIntent = new Intent(itemView.getContext(), CategoryActivity.class);
+                    categoryIntent.putExtra("CategoryName", name);
+                    itemView.getContext().startActivity(categoryIntent);
                 }
             });
         }
