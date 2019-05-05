@@ -8,6 +8,7 @@ public class HomePageModel {
     public static final int GRID_PRODUCT_VIEW = 3;
 
     private int type;
+    private String backgroundColor;
 
     ////////// Banner Slider
     private List<SliderModel> sliderModelList;
@@ -39,10 +40,19 @@ public class HomePageModel {
     private String title;
     private List<HorizontalProductScrollModel> mHorizontalProductScrollModelList;
 
-    public HomePageModel(int type, String title, List<HorizontalProductScrollModel> horizontalProductScrollModelList) {
+    public HomePageModel(int type, String title, String backgroundColor,List<HorizontalProductScrollModel> horizontalProductScrollModelList) {
         this.type = type;
         this.title = title;
+        this.backgroundColor = backgroundColor;
         mHorizontalProductScrollModelList = horizontalProductScrollModelList;
+    }
+
+    public String getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(String backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 
     public String getTitle() {

@@ -56,7 +56,7 @@ public class GridProductLayoutAdapter extends BaseAdapter {
                 }
             });
 
-            productImage.setImageResource(horizontalProductScrollModelList.get(i).getProductImage());
+           // productImage.setImageResource(horizontalProductScrollModelList.get(i).getProductImage());
             productTitle.setText(horizontalProductScrollModelList.get(i).getProductTitle());
             productDescription.setText(horizontalProductScrollModelList.get(i).getProductDescription());
             productPrice.setText(horizontalProductScrollModelList.get(i).getProductPrice());

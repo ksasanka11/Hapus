@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.List;
 
 public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<HorizontalProductScrollAdapter.ViewHolder> {
@@ -27,7 +30,7 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
 
     @Override
     public void onBindViewHolder(@NonNull HorizontalProductScrollAdapter.ViewHolder viewHolder, int position) {
-        int resource = mHorizontalProductScrollModelList.get(position).getProductImage();
+        String resource = mHorizontalProductScrollModelList.get(position).getProductImage();
         String title = mHorizontalProductScrollModelList.get(position).getProductTitle();
         String description = mHorizontalProductScrollModelList.get(position).getProductDescription();
         String price = mHorizontalProductScrollModelList.get(position).getProductPrice();
@@ -40,11 +43,9 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
 
     @Override
     public int getItemCount() {
-        if(mHorizontalProductScrollModelList.size() > 5){
-            return 0;
-        }else {
+
             return mHorizontalProductScrollModelList.size();
-        }
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -61,8 +62,8 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
             productPrice = itemView.findViewById(R.id.h_s_product_price);
         }
 
-        private void setProductImage(int resource){
-            productImage.setImageResource(resource);
+        private void setProductImage(String resource){
+            Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.home)).into(productImage);
         }
 
         private void setProductTitle(String title){
@@ -74,7 +75,7 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
         }
 
         private void setProductPrice(String price){
-            productTitle.setText(price);
+            productTitle.setText("Rs. "+price+"/kg");
         }
     }
 }
