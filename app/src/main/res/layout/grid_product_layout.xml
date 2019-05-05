@@ -37,7 +37,7 @@
     <GridView
         android:id="@+id/grid_product_layout_gridview"
         android:layout_width="0dp"
-        android:layout_height="326dp"
+        android:layout_height="320dp"
         android:layout_marginBottom="8dp"
         android:background="#e1e1e1"
         android:horizontalSpacing="1dp"
