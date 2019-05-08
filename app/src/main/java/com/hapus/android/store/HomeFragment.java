@@ -23,6 +23,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.hapus.android.store.DBqueries.categoryModelList;
+import static com.hapus.android.store.DBqueries.homePageModelList;
+import static com.hapus.android.store.DBqueries.loadCategories;
+import static com.hapus.android.store.DBqueries.loadFragmentData;
+import static com.hapus.android.store.DBqueries.mFirebaseFirestore;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,14 +43,7 @@ public class HomeFragment extends Fragment {
     private CategoryAdapter categoryAdapter;
     private RecyclerView homePageRecyclerView;
     HomePageAdapter adapter;
-    private List<CategoryModel> categoryModelList;
-    private FirebaseFirestore mFirebaseFirestore;
 
-    ////////// Horizontal Product Layout
-    /*private TextView horizontalLayoutTitle;
-    private Button horizontalLayoutViewAllButton;
-    private RecyclerView horizontalRecyclerView;*/
-    ////////// Horizontal Product Layout
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,63 +58,15 @@ public class HomeFragment extends Fragment {
 
         //categoryRecyclerView.addItemDecoration(new SpacingItemDecoration(getContext(), 16));
 
-        categoryModelList = new ArrayList<CategoryModel>();
+
         categoryAdapter = new CategoryAdapter(categoryModelList);
         categoryRecyclerView.setAdapter(categoryAdapter);
-        mFirebaseFirestore = FirebaseFirestore.getInstance();
-        mFirebaseFirestore.collection("CATEGORIES").orderBy("index").get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                categoryModelList.add(new CategoryModel(documentSnapshot.get("icon").toString(), documentSnapshot.get("categoryName").toString()));
-                            }
-                            categoryAdapter.notifyDataSetChanged();
-                        } else {
-                            String error = task.getException().getMessage();
-                            Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
 
-        ////////// Banner Slider
-
-
-        ////////// Banner Slider
-
-        ////////// Horizontal Product Layout
-        /*horizontalLayoutTitle = view.findViewById(R.id.horizontal_scroll_layout_title);
-        horizontalLayoutViewAllButton = view.findViewById(R.id.horizontal_scroll_view_all_button);
-        horizontalRecyclerView = view.findViewById(R.id.horizontal_scroll_layout_recyclerview);*/
-
-        /*List<HorizontalProductScrollModel> horizontalProductScrollModelList = new ArrayList<>();
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.korralu, "Korralu", "Foxtail millets", "Rs.100/kg"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.app_icon, "Korralu", "Foxtail millets", "Rs.100/kg"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.my_account, "Korralu", "Foxtail millets", "Rs.100/kg"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.ic_mail_outline_24px, "Korralu", "Foxtail millets", "Rs.100/kg"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.add_profile_pic, "Korralu", "Foxtail millets", "Rs.100/kg"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.close_cross, "Korralu", "Foxtail millets", "Rs.100/kg"));*/
-
-        /*HorizontalProductScrollAdapter horizontalProductScrollAdapter = new HorizontalProductScrollAdapter(horizontalProductScrollModelList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        horizontalRecyclerView.setLayoutManager(linearLayoutManager);
-        horizontalRecyclerView.setAdapter(horizontalProductScrollAdapter);
-        horizontalProductScrollAdapter.notifyDataSetChanged();*/
-
-        ////////// Horizontal Product Layout
-
-        /////////  Grid Product Layout
-
-        /*TextView gridLayoutTitle = view.findViewById(R.id.grid_product_layout_title);
-        Button gridLayoutBtn = view.findViewById(R.id.grid_product_lauout_viewall_btn);
-        GridView gridView = view.findViewById(R.id.grid_product_layout_gridview);
-
-        gridView.setAdapter(new GridProductLayoutAdapter(horizontalProductScrollModelList));*/
-
-        /////////  Grid Product Layout
-
+        if(categoryModelList.size() == 0){
+            loadCategories(categoryAdapter, getContext());
+        }else{
+            categoryAdapter.notifyDataSetChanged();
+        }
 
         ///////////////////////
 
@@ -123,50 +74,15 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager testingLayoutManager = new LinearLayoutManager(getContext());
         testingLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         homePageRecyclerView.setLayoutManager(testingLayoutManager);
-        final List<HomePageModel> homePageModelList = new ArrayList<>();
+
         adapter = new HomePageAdapter(homePageModelList);
         homePageRecyclerView.setAdapter(adapter);
 
-        mFirebaseFirestore.collection("CATEGORIES")
-                .document("HOME").collection("TOP_DEALS").orderBy("index").get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-
-                                if((long) documentSnapshot.get("view_type") == 0){
-                                    List<SliderModel> sliderModelList = new ArrayList<>();
-                                    long no_of_banners = (long)documentSnapshot.get("no_of_banners");
-                                    for(long x = 1; x <= no_of_banners; x++){
-                                        sliderModelList.add(new SliderModel(documentSnapshot.get("banner"+x).toString()
-                                                , documentSnapshot.get("banner"+x+"_background").toString()));
-                                    }
-                                    homePageModelList.add(new HomePageModel(0, sliderModelList));
-
-                                }else if((long) documentSnapshot.get("view_type") == 2){
-                                    List<HorizontalProductScrollModel> horizontalProductScrollModelList = new ArrayList<>();
-                                    long no_of_products = (long)documentSnapshot.get("no_of_products");
-                                    for(long x = 1; x <= no_of_products; x++){
-                                        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(documentSnapshot.get("product_ID_"+x).toString()
-                                                , documentSnapshot.get("product_image_"+x).toString()
-                                                , documentSnapshot.get("product_title_"+x).toString()
-                                                , documentSnapshot.get("product_subtitle_"+x).toString()
-                                                , documentSnapshot.get("product_price_"+x).toString()));
-                                    }
-                                    homePageModelList.add(new HomePageModel(2, documentSnapshot.get("layout_title").toString(), documentSnapshot.get("layout_background").toString(),horizontalProductScrollModelList));
-                                }else if((long) documentSnapshot.get("view_type") == 3){
-
-                                }
-                            }
-                            adapter.notifyDataSetChanged();
-                        } else {
-                            String error = task.getException().getMessage();
-                            Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
+        //if(homePageModelList.size() == 0){
+            loadFragmentData(adapter, getContext());
+        //}else{
+            categoryAdapter.notifyDataSetChanged();
+        //}
 
         //////////////////////
 
