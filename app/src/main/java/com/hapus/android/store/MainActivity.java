@@ -1,6 +1,7 @@
 package com.hapus.android.store;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -19,14 +20,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FrameLayout frameLayout;
     private ImageView noInternetConnection;
+    private FirebaseAuth mFirebaseAuth;
+    private TextView userEmail;
+    private TextView userFullName;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +45,8 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
+        userEmail = findViewById(R.id.main_email);
+        userFullName = findViewById(R.id.main_fullname);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -45,6 +54,8 @@ public class MainActivity extends AppCompatActivity
 
         frameLayout = findViewById(R.id.main_framelayout);
         noInternetConnection = findViewById(R.id.no_internet_connection);
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        //user = FirebaseAuth.getInstance().getCurrentUser();
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -55,6 +66,15 @@ public class MainActivity extends AppCompatActivity
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
             drawer.addDrawerListener(toggle);
             toggle.syncState();
+
+            /*if(user != null){
+                String email = user.getEmail();
+                String name = user.getDisplayName();
+
+                userEmail.setText(email);
+                userFullName.setText(name);
+            }*/
+
             setFragment(new HomeFragment());
         }else{
             Glide.with(this).load(R.drawable.nointernet).into(noInternetConnection);
@@ -121,6 +141,10 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_sign_out) {
             // Handle the camera action
+            Intent signOut = new Intent(MainActivity.this, RegisterActivity.class);
+            mFirebaseAuth.signOut();
+            startActivity(signOut);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
