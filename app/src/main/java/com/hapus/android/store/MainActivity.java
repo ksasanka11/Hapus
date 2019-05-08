@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,8 +25,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -45,22 +51,47 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        userEmail = findViewById(R.id.main_email);
-        userFullName = findViewById(R.id.main_fullname);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
+
+        userEmail = navigationView.getHeaderView(0).findViewById(R.id.main_email);
+        userFullName = navigationView.getHeaderView(0).findViewById(R.id.main_fullname);
 
         frameLayout = findViewById(R.id.main_framelayout);
         noInternetConnection = findViewById(R.id.no_internet_connection);
         mFirebaseAuth = FirebaseAuth.getInstance();
         //user = FirebaseAuth.getInstance().getCurrentUser();
 
+        if (mFirebaseAuth.getCurrentUser() != null) {
+            FirebaseFirestore.getInstance().collection("USERS")
+                    .document(mFirebaseAuth.getCurrentUser().getUid() + "").get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot documentSnapshot = task.getResult();
+                                String name = documentSnapshot.get("fullname").toString();
+                                String phone = documentSnapshot.getString("phone").toString();
+                                try{
+                                    userFullName.setText(name);
+                                    userEmail.setText(phone);
+                                    Log.e("Firebase error", "Nope");
+                                }catch (NullPointerException e){
+                                    Log.e("Firebase_name", name+ " "+phone);
+                                }
+                            }
+                        }
+                    });
+        }
+
+        //Log.e("Firebase", mFirebaseAuth.getCurrentUser().getUid());
+
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        if(networkInfo != null && networkInfo.isConnected()){
+        if (networkInfo != null && networkInfo.isConnected()) {
             noInternetConnection.setVisibility(View.GONE);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -76,7 +107,7 @@ public class MainActivity extends AppCompatActivity
             }*/
 
             setFragment(new HomeFragment());
-        }else{
+        } else {
             Glide.with(this).load(R.drawable.nointernet).into(noInternetConnection);
             noInternetConnection.setVisibility(View.VISIBLE);
         }
@@ -152,7 +183,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void setFragment(Fragment fragment){
+    private void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(frameLayout.getId(), fragment);
         fragmentTransaction.commit();
