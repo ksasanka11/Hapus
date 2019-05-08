@@ -1,5 +1,6 @@
 package com.hapus.android.store;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -7,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -48,7 +50,10 @@ public class Product_details_activity extends AppCompatActivity {
 
         mFirebaseFirestore = FirebaseFirestore.getInstance();
         final List<String> productImages = new ArrayList<>();
-        mFirebaseFirestore.collection("PRODUCTS").document("tYX96GVNPeUf0Nf0FcOV").get()
+        Intent i = getIntent();
+        String productID =  i.getStringExtra("productId");
+        Log.e("Products", productID);
+        mFirebaseFirestore.collection("PRODUCTS").document(productID).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
