@@ -78,11 +78,11 @@ public class HomeFragment extends Fragment {
         adapter = new HomePageAdapter(homePageModelList);
         homePageRecyclerView.setAdapter(adapter);
 
-        //if(homePageModelList.size() == 0){
+        if(homePageModelList.size() == 0){
             loadFragmentData(adapter, getContext());
-        //}else{
-            categoryAdapter.notifyDataSetChanged();
-        //}
+        }else{
+            adapter.notifyDataSetChanged();
+        }
 
         //////////////////////
 
