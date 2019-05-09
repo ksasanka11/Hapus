@@ -1,10 +1,16 @@
 package com.hapus.android.store;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,17 +21,26 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final int HOME_FRAGMENT=0;
-    private static final int CART_FRAGMENT=1;
-    private NavigationView navigationView;
-
-
     FrameLayout frameLayout;
-    private static int currentFragment;
+    private ImageView noInternetConnection;
+    private FirebaseAuth mFirebaseAuth;
+    private TextView userEmail;
+    private TextView userFullName;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,17 +51,66 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
 
+        userEmail = navigationView.getHeaderView(0).findViewById(R.id.main_email);
+        userFullName = navigationView.getHeaderView(0).findViewById(R.id.main_fullname);
+
         frameLayout = findViewById(R.id.main_framelayout);
-        setFragment(new HomeFragment(),HOME_FRAGMENT);
+        noInternetConnection = findViewById(R.id.no_internet_connection);
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        //user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (mFirebaseAuth.getCurrentUser() != null) {
+            FirebaseFirestore.getInstance().collection("USERS")
+                    .document(mFirebaseAuth.getCurrentUser().getUid() + "").get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot documentSnapshot = task.getResult();
+                                String name = documentSnapshot.get("fullname").toString();
+                                String phone = documentSnapshot.getString("phone").toString();
+                                try{
+                                    userFullName.setText(name);
+                                    userEmail.setText(phone);
+                                    Log.e("Firebase error", "Nope");
+                                }catch (NullPointerException e){
+                                    Log.e("Firebase_name", name+ " "+phone);
+                                }
+                            }
+                        }
+                    });
+        }
+
+        //Log.e("Firebase", mFirebaseAuth.getCurrentUser().getUid());
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            noInternetConnection.setVisibility(View.GONE);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+
+            /*if(user != null){
+                String email = user.getEmail();
+                String name = user.getDisplayName();
+
+                userEmail.setText(email);
+                userFullName.setText(name);
+            }*/
+
+            setFragment(new HomeFragment());
+        } else {
+            Glide.with(this).load(R.drawable.nointernet).into(noInternetConnection);
+            noInternetConnection.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -62,9 +126,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if(currentFragment==HOME_FRAGMENT) {
-            getMenuInflater().inflate(R.menu.main, menu);
-        }
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -83,18 +145,11 @@ public class MainActivity extends AppCompatActivity
             //todo: notification
             return true;
         } else if (id == R.id.main_cart_icon) {
-
-            myCart();
+            //todo: cart
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void myCart(){
-        invalidateOptionsMenu();
-        setFragment(new MyCartFragment(),CART_FRAGMENT);
-        navigationView.getMenu().getItem(3).setChecked(true);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -104,13 +159,12 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_my_mall) {
-            setFragment(new HomeFragment(),HOME_FRAGMENT);
             // Handle the camera action
         } else if (id == R.id.nav_my_orders) {
             // Handle the camera action
         } else if (id == R.id.nav_my_rewards) {
 
-        } else if (id == R.id.nav_my_cart) { myCart();
+        } else if (id == R.id.nav_my_cart) {
 
         } else if (id == R.id.nav_my_wishlist) {
 
@@ -118,6 +172,10 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_sign_out) {
             // Handle the camera action
+            Intent signOut = new Intent(MainActivity.this, RegisterActivity.class);
+            mFirebaseAuth.signOut();
+            startActivity(signOut);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -125,8 +183,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void setFragment(Fragment fragment,int fragmentNo){
-        currentFragment=fragmentNo;
+    private void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(frameLayout.getId(), fragment);
         fragmentTransaction.commit();

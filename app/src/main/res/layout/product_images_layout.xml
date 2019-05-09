@@ -44,13 +44,15 @@
 
     <TextView
         android:id="@+id/product_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="Product Title"
         android:textColor="#000000"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/product_images_viewpager" />
 
@@ -98,7 +100,7 @@
         app:layout_constraintTop_toTopOf="@+id/linearLayout2" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/product_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -116,8 +118,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Rs.599/-"
-        app:layout_constraintBottom_toBottomOf="@+id/textView8"
-        app:layout_constraintStart_toEndOf="@+id/textView8" />
+        app:layout_constraintBottom_toBottomOf="@+id/product_price"
+        app:layout_constraintStart_toEndOf="@+id/product_price" />
 
     <View
         android:id="@+id/divider5"
@@ -134,7 +136,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView8"
+        app:layout_constraintBottom_toBottomOf="@+id/product_price"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewpager_indicator"
         app:srcCompat="@drawable/cod_image" />

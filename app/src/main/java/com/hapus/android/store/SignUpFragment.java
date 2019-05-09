@@ -244,11 +244,11 @@ public class SignUpFragment extends Fragment {
                                     userdata.put("fullname", fullName.getText().toString());
                                     userdata.put("phone", phone.getText().toString());
 
-                                    firebaseFirestore.collection("USERS")
-                                            .add(userdata)
-                                            .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                    firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
+                                            .set(userdata)
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
-                                                public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                public void onComplete(@NonNull Task<Void> task) {
                                                     if(task.isSuccessful()){
                                                         mainIntent();
                                                     }else{

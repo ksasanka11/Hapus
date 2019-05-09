@@ -1,7 +1,11 @@
 package com.hapus.android.store;
 
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 import java.util.Timer;
@@ -65,14 +73,16 @@ public class HomePageAdapter extends RecyclerView.Adapter {
                 ((BannerSliderViewHolder) viewHolder).setBannerSliderViewPager(sliderModelList);
                 break;
             case HomePageModel.HORIZONTAL_PRODUCT_VIEW:
+                String layoutColor = mHomePageModelList.get(i).getBackgroundColor();
                 String horizontalLayoutTitle = mHomePageModelList.get(i).getTitle();
                 List<HorizontalProductScrollModel> horizontalProductScrollModelList = mHomePageModelList.get(i).getHorizontalProductScrollModelList();
-                ((HorizontalProductViewHolder) viewHolder).setHorizontalProductLayout(horizontalProductScrollModelList, horizontalLayoutTitle);
+                ((HorizontalProductViewHolder) viewHolder).setHorizontalProductLayout(horizontalProductScrollModelList, horizontalLayoutTitle, layoutColor);
                 break;
             case HomePageModel.GRID_PRODUCT_VIEW:
+                String gridLayoutColor =  mHomePageModelList.get(i).getBackgroundColor();
                 String gridLayoutTitle = mHomePageModelList.get(i).getTitle();
                 List<HorizontalProductScrollModel> gridProductScrollModelList = mHomePageModelList.get(i).getHorizontalProductScrollModelList();
-                ((GridProductViewHolder) viewHolder).setGridProductLayout(gridProductScrollModelList, gridLayoutTitle);
+                ((GridProductViewHolder) viewHolder).setGridProductLayout(gridProductScrollModelList, gridLayoutTitle, gridLayoutColor);
                 break;
             default:
                 return;
@@ -179,17 +189,20 @@ public class HomePageAdapter extends RecyclerView.Adapter {
         private TextView horizontalLayoutTitle;
         private Button horizontalLayoutViewAllButton;
         private RecyclerView horizontalRecyclerView;
+        private ConstraintLayout container;
 
         public HorizontalProductViewHolder(@NonNull View itemView) {
             super(itemView);
+            container = itemView.findViewById(R.id.container);
             horizontalLayoutTitle = itemView.findViewById(R.id.horizontal_scroll_layout_title);
             horizontalLayoutViewAllButton = itemView.findViewById(R.id.horizontal_scroll_view_all_button);
             horizontalRecyclerView = itemView.findViewById(R.id.horizontal_scroll_layout_recyclerview);
 
         }
 
-        private void setHorizontalProductLayout(List<HorizontalProductScrollModel> horizontalProductScrollModelList, String title) {
+        private void setHorizontalProductLayout(List<HorizontalProductScrollModel> horizontalProductScrollModelList, String title, String color) {
 
+            container.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(color)));
             horizontalLayoutTitle.setText(title);
 
             if(horizontalProductScrollModelList.size() > 5){
@@ -211,20 +224,43 @@ public class HomePageAdapter extends RecyclerView.Adapter {
     public class GridProductViewHolder extends RecyclerView.ViewHolder{
         private TextView gridLayoutTitle;
         private Button gridLayoutViewAllBtn;
-        private GridView gridView;
+        private GridView gridProductLayout;
+        private ConstraintLayout container;
 
         public GridProductViewHolder(@NonNull View itemView) {
             super(itemView);
 
             gridLayoutTitle = itemView.findViewById(R.id.grid_product_layout_title);
-            gridLayoutViewAllBtn = itemView.findViewById(R.id.grid_product_lauout_viewall_btn);
-            gridView = itemView.findViewById(R.id.grid_product_layout_gridview);
-
+            gridLayoutViewAllBtn = itemView.findViewById(R.id.grid_product_layout_viewall_btn);
+            gridProductLayout = itemView.findViewById(R.id.grid_product_layout_gridview);
+            container = itemView.findViewById(R.id.container);
         }
 
-        private void setGridProductLayout(List<HorizontalProductScrollModel> horizontalProductScrollModelList, String title){
+        private void setGridProductLayout(List<HorizontalProductScrollModel> horizontalProductScrollModelList, String title, String color){
+            container.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(color)));
             gridLayoutTitle.setText(title);
-            gridView.setAdapter(new GridProductLayoutAdapter(horizontalProductScrollModelList));
+
+            for(int x=0; x<4; x++){
+                ImageView productImage = gridProductLayout.getChildAt(x).findViewById(R.id.h_s_product_image);
+                TextView productTitle = gridProductLayout.getChildAt(x).findViewById(R.id.h_s_product_title);
+                TextView productDescription = gridProductLayout.getChildAt(x).findViewById(R.id.h_s_product_description);
+                TextView productPrice = gridProductLayout.getChildAt(x).findViewById(R.id.h_s_product_price);
+
+
+                Glide.with(itemView.getContext()).load(horizontalProductScrollModelList.get(x).getProductImage()).apply(new RequestOptions().placeholder(R.drawable.home)).into(productImage);
+                productTitle.setText(horizontalProductScrollModelList.get(x).getProductTitle());
+                productDescription.setText(horizontalProductScrollModelList.get(x).getProductDescription());
+                productPrice.setText(horizontalProductScrollModelList.get(x).getProductPrice());
+                gridProductLayout.getChildAt(x).setBackgroundColor(Color.parseColor("#ffffff"));
+                gridProductLayout.getChildAt(x).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent productDetailsIntent = new Intent(itemView.getContext(), Product_details_activity.class);
+                        itemView.getContext().startActivity(productDetailsIntent);
+                    }
+                });
+            }
+            gridProductLayout.setAdapter(new GridProductLayoutAdapter(horizontalProductScrollModelList));
         }
     }
 }
