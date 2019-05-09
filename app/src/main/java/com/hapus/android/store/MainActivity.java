@@ -19,13 +19,7 @@ import android.widget.FrameLayout;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final int HOME_FRAGMENT=0;
-    private static final int CART_FRAGMENT=1;
-    private NavigationView navigationView;
-
-
     FrameLayout frameLayout;
-    private static int currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +35,12 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
 
         frameLayout = findViewById(R.id.main_framelayout);
-        setFragment(new HomeFragment(),HOME_FRAGMENT);
+        setFragment(new HomeFragment());
     }
 
     @Override
@@ -62,9 +56,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if(currentFragment==HOME_FRAGMENT) {
-            getMenuInflater().inflate(R.menu.main, menu);
-        }
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -83,18 +75,11 @@ public class MainActivity extends AppCompatActivity
             //todo: notification
             return true;
         } else if (id == R.id.main_cart_icon) {
-
-            myCart();
+            //todo: cart
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void myCart(){
-        invalidateOptionsMenu();
-        setFragment(new MyCartFragment(),CART_FRAGMENT);
-        navigationView.getMenu().getItem(3).setChecked(true);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -104,13 +89,12 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_my_mall) {
-            setFragment(new HomeFragment(),HOME_FRAGMENT);
             // Handle the camera action
         } else if (id == R.id.nav_my_orders) {
             // Handle the camera action
         } else if (id == R.id.nav_my_rewards) {
 
-        } else if (id == R.id.nav_my_cart) { myCart();
+        } else if (id == R.id.nav_my_cart) {
 
         } else if (id == R.id.nav_my_wishlist) {
 
@@ -125,8 +109,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void setFragment(Fragment fragment,int fragmentNo){
-        currentFragment=fragmentNo;
+    private void setFragment(Fragment fragment){
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(frameLayout.getId(), fragment);
         fragmentTransaction.commit();
