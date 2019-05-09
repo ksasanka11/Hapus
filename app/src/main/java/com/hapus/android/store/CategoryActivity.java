@@ -11,6 +11,11 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.hapus.android.store.DBqueries.categoryPageModelList;
+import static com.hapus.android.store.DBqueries.homePageModelList;
+import static com.hapus.android.store.DBqueries.loadCategoryData;
+import static com.hapus.android.store.DBqueries.loadFragmentData;
+
 public class CategoryActivity extends AppCompatActivity {
 
     private RecyclerView categoryRecyclerView;
@@ -59,10 +64,15 @@ public class CategoryActivity extends AppCompatActivity {
         testingLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         categoryRecyclerView.setLayoutManager(testingLayoutManager);
 
-        List<HomePageModel> homePageModelList = new ArrayList<>();
-        HomePageAdapter adapter = new HomePageAdapter(homePageModelList);
+        //List<HomePageModel> homePageModelList = new ArrayList<>();
+        HomePageAdapter adapter = new HomePageAdapter(categoryPageModelList);
         categoryRecyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+
+        if(categoryPageModelList.size() == 0){
+            loadCategoryData(adapter, CategoryActivity.this);
+        }else{
+            adapter.notifyDataSetChanged();
+        }
 
         //////////////////////
 
