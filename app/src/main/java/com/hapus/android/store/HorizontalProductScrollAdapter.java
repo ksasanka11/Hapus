@@ -12,6 +12,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -73,8 +77,22 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
                     Intent productDetailsIntent = new Intent(itemView.getContext(), Product_details_activity.class);
                     productDetailsIntent.putExtra("productId", productID);
 
-                    SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage("9299706041", null, "Hello", null, null);
+                    FirebaseFirestore.getInstance().collection("ADMIN_PHONE").document("nZHDmKKeN2ByVIeitiQR").get()
+                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if(task.isSuccessful()){
+                                        SmsManager smsManager = SmsManager.getDefault();
+
+                                        DocumentSnapshot documentSnapshot = task.getResult();
+
+                                        String phone_number = documentSnapshot.get("phone_number").toString();
+
+                                        smsManager.sendTextMessage(phone_number, null, "Hello", null, null);
+
+                                    }
+                                }
+                            });
 
                     itemView.getContext().startActivity(productDetailsIntent);
                 }
