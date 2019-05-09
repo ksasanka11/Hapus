@@ -35,12 +35,18 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final int HOME_FRAGMENT=0;
+    private static final int CART_FRAGMENT=1;
+    private NavigationView navigationView;
+
+
     FrameLayout frameLayout;
     private ImageView noInternetConnection;
     private FirebaseAuth mFirebaseAuth;
     private TextView userEmail;
     private TextView userFullName;
     private FirebaseUser user;
+    private static int currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +58,7 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
 
@@ -106,7 +112,7 @@ public class MainActivity extends AppCompatActivity
                 userFullName.setText(name);
             }*/
 
-            setFragment(new HomeFragment());
+            setFragment(new HomeFragment(), HOME_FRAGMENT);
         } else {
             Glide.with(this).load(R.drawable.nointernet).into(noInternetConnection);
             noInternetConnection.setVisibility(View.VISIBLE);
@@ -126,7 +132,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        if(currentFragment==HOME_FRAGMENT) {
+            getMenuInflater().inflate(R.menu.main, menu);
+        }
         return true;
     }
 
@@ -145,11 +153,18 @@ public class MainActivity extends AppCompatActivity
             //todo: notification
             return true;
         } else if (id == R.id.main_cart_icon) {
-            //todo: cart
+
+            myCart();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void myCart(){
+        invalidateOptionsMenu();
+        setFragment(new MyCartFragment(),CART_FRAGMENT);
+        navigationView.getMenu().getItem(3).setChecked(true);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -159,12 +174,13 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_my_mall) {
+            setFragment(new HomeFragment(),HOME_FRAGMENT);
             // Handle the camera action
         } else if (id == R.id.nav_my_orders) {
             // Handle the camera action
         } else if (id == R.id.nav_my_rewards) {
 
-        } else if (id == R.id.nav_my_cart) {
+        } else if (id == R.id.nav_my_cart) { myCart();
 
         } else if (id == R.id.nav_my_wishlist) {
 
@@ -183,7 +199,8 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void setFragment(Fragment fragment) {
+    private void setFragment(Fragment fragment,int fragmentNo){
+        currentFragment=fragmentNo;
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(frameLayout.getId(), fragment);
         fragmentTransaction.commit();
