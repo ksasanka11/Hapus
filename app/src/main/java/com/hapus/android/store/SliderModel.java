@@ -2,19 +2,19 @@ package com.hapus.android.store;
 
 public class SliderModel {
 
-    private String banner;
+    private int banner;
     private String backgroundColor;
 
-    public SliderModel(String banner, String backgroundColor) {
+    public SliderModel(int banner, String backgroundColor) {
         this.banner = banner;
         this.backgroundColor = backgroundColor;
     }
 
-    public String getBanner() {
+    public int getBanner() {
         return banner;
     }
 
-    public void setBanner(String banner) {
+    public void setBanner(int banner) {
         this.banner = banner;
     }
 

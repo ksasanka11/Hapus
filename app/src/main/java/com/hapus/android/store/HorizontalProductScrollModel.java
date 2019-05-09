@@ -2,25 +2,23 @@ package com.hapus.android.store;
 
 public class HorizontalProductScrollModel {
 
-    private String productID;
-    private String productImage;
+    private int productImage;
     private String productTitle;
     private String productDescription;
     private String productPrice;
 
-    public HorizontalProductScrollModel(String productID, String productImage, String productTitle, String productDescription, String productPrice) {
-        this.productID = productID;
+    public HorizontalProductScrollModel(int productImage, String productTitle, String productDescription, String productPrice) {
         this.productImage = productImage;
         this.productTitle = productTitle;
         this.productDescription = productDescription;
         this.productPrice = productPrice;
     }
 
-    public String getProductImage() {
+    public int getProductImage() {
         return productImage;
     }
 
-    public void setProductImage(String productImage) {
+    public void setProductImage(int productImage) {
         this.productImage = productImage;
     }
 
@@ -46,13 +44,5 @@ public class HorizontalProductScrollModel {
 
     public void setProductPrice(String productPrice) {
         this.productPrice = productPrice;
-    }
-
-    public String getProductID() {
-        return productID;
-    }
-
-    public void setProductID(String productID) {
-        this.productID = productID;
     }
 }
