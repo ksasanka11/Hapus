@@ -8,9 +8,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,6 +82,30 @@ public class Product_details_activity extends AppCompatActivity {
                 });
 
         viewpagerIndicator.setupWithViewPager(productImagesViewPager,true);
+
+        final Button sendMsg=findViewById(R.id.buy_now_btn);
+        sendMsg.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+
+                FirebaseFirestore.getInstance().collection("ADMIN_PHONE").document("nZHDmKKeN2ByVIeitiQR").get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if(task.isSuccessful()){
+                                    SmsManager smsManager = SmsManager.getDefault();
+
+                                    DocumentSnapshot documentSnapshot = task.getResult();
+
+                                    String phone_number = documentSnapshot.get("phone_number").toString();
+
+                                    smsManager.sendTextMessage(phone_number, null, "Hello", null, null);
+
+                                }
+                            }
+                        });
+            }
+        });
 
     }
     @Override

@@ -174,8 +174,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_my_mall) {
+            invalidateOptionsMenu();
             setFragment(new HomeFragment(),HOME_FRAGMENT);
-            // Handle the camera action
         } else if (id == R.id.nav_my_orders) {
             // Handle the camera action
         } else if (id == R.id.nav_my_rewards) {
@@ -187,7 +187,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_my_account) {
 
         } else if (id == R.id.nav_sign_out) {
-            // Handle the camera action
             Intent signOut = new Intent(MainActivity.this, RegisterActivity.class);
             mFirebaseAuth.signOut();
             startActivity(signOut);

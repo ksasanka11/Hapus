@@ -76,8 +76,9 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
                 public void onClick(View view) {
                     Intent productDetailsIntent = new Intent(itemView.getContext(), Product_details_activity.class);
                     productDetailsIntent.putExtra("productId", productID);
+                    itemView.getContext().startActivity(productDetailsIntent);
 
-                    FirebaseFirestore.getInstance().collection("ADMIN_PHONE").document("nZHDmKKeN2ByVIeitiQR").get()
+               /*     FirebaseFirestore.getInstance().collection("ADMIN_PHONE").document("nZHDmKKeN2ByVIeitiQR").get()
                             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -92,9 +93,9 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
 
                                     }
                                 }
-                            });
+                            });*/
 
-                    itemView.getContext().startActivity(productDetailsIntent);
+                   // itemView.getContext().startActivity(productDetailsIntent);
                 }
             });
         }
